@@ -23,7 +23,8 @@ class LockableVerticalDragGestureRecognizer
   bool isFlingGesture(VelocityEstimate estimate) {
     final double minVelocity = minFlingVelocity ?? kMinFlingVelocity;
     final double minDistance = minFlingDistance ?? kTouchSlop;
-    if ((lock == SlideContainerLock.top && estimate.pixelsPerSecond.dy < 0.0) ||
+    if ((lock == SlideContainerLock.vertical) ||
+        (lock == SlideContainerLock.top && estimate.pixelsPerSecond.dy < 0.0) ||
         (lock == SlideContainerLock.bottom &&
             estimate.pixelsPerSecond.dy > 0.0)) {
       return false;
@@ -34,7 +35,8 @@ class LockableVerticalDragGestureRecognizer
 
   @override
   bool get _hasSufficientPendingDragDeltaToAccept {
-    if ((lock == SlideContainerLock.top && _pendingDragOffset.dy < 0.0) ||
+    if ((lock == SlideContainerLock.vertical) ||
+        (lock == SlideContainerLock.top && _pendingDragOffset.dy < 0.0) ||
         (lock == SlideContainerLock.bottom && _pendingDragOffset.dy > 0.0)) {
       return false;
     }

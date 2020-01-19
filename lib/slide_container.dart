@@ -23,6 +23,7 @@ enum SlideContainerLock {
   bottom,
   left,
   right,
+  vertical,
   none,
 }
 
@@ -190,7 +191,7 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         break;
       case SlideContainerDirection.vertical:
         if (containerOffset == -maxDragDistance) {
-          return SlideContainerLock.top;
+          return SlideContainerLock.vertical;
         } else if (containerOffset == maxDragDistance) {
           return SlideContainerLock.bottom;
         } else {
