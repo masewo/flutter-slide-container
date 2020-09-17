@@ -127,7 +127,7 @@ abstract class ExtendedDragGestureRecognizer extends DragGestureRecognizer {
   Offset _pendingDragOffset;
   Duration _lastPendingEventTimestamp;
 
-  bool isFlingGesture(VelocityEstimate estimate);
+  bool isFlingGesture(VelocityEstimate estimate, PointerDeviceKind kind);
 
   Offset _getDeltaForDetails(Offset delta);
 
@@ -140,7 +140,7 @@ abstract class ExtendedDragGestureRecognizer extends DragGestureRecognizer {
   @override
   void addPointer(PointerEvent event) {
     startTrackingPointer(event.pointer);
-    _velocityTrackers[event.pointer] = VelocityTracker();
+    _velocityTrackers[event.pointer] = VelocityTracker(PointerDeviceKind.touch);
     if (_state == _DragState.ready) {
       _state = _DragState.possible;
       _initialPosition = event.position;
