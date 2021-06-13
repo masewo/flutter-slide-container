@@ -15,7 +15,7 @@ class LockableVerticalDragGestureRecognizer
   LockableVerticalDragGestureRecognizer({
     required this.lockGetter,
     Object? debugOwner,
-  })  : super(debugOwner: debugOwner!);
+  })  : super(debugOwner: debugOwner);
 
   SlideContainerLock get lock => lockGetter();
 
