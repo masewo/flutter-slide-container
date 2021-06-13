@@ -47,7 +47,7 @@ class SlideContainer extends StatefulWidget {
   /// Default to [MediaQueryData.size].height if the [slideDirection] is vertical and [MediaQueryData.size].width if the [slideDirection] is horizontal.
   ///
   /// In px.
-  final double maxSlideDistance;
+  final double? maxSlideDistance;
 
   /// If the drag gesture is faster than this it will complete the slide
   ///
@@ -63,7 +63,7 @@ class SlideContainer extends StatefulWidget {
   /// Default to half of [maxSlideDistance].
   ///
   /// In px.
-  final double minSlideDistanceToValidate;
+  final double? minSlideDistanceToValidate;
 
   /// The strength of the dampening effect when the container is moved.
   ///
@@ -74,7 +74,7 @@ class SlideContainer extends StatefulWidget {
   final double dampeningStrength;
 
   /// Called when the slide gesture starts.
-  final VoidCallback onSlideStarted;
+  final VoidCallback? onSlideStarted;
 
   /// Called once when the drag distance becomes superior to [minSlideDistanceToValidate] (ending the gesture here would complete the slide).
   ///
@@ -82,7 +82,7 @@ class SlideContainer extends StatefulWidget {
   /// If a slide is completed because of a fast drag, the auto-slide animation will not trigger this callback.
   ///
   /// Useful to give users feedback (like haptics).
-  final VoidCallback onSlideValidated;
+  final VoidCallback? onSlideValidated;
 
   /// Called once after [onSlideValidated] if the drag distance becomes inferior to [minSlideDistanceToValidate] (ending the gesture here would cancel the slide).
   ///
@@ -90,30 +90,30 @@ class SlideContainer extends StatefulWidget {
   /// If a slide is cancelled because of a fast drag, the auto-slide animation will not trigger this callback.
   ///
   /// Useful to give users feedback (like haptics).
-  final VoidCallback onSlideUnvalidated;
+  final VoidCallback? onSlideUnvalidated;
 
   /// Called when:
   /// - The slide gesture ends with a distance superior to [minSlideDistanceToValidate].
   /// - The slide gesture ends with a velocity superior to [minDragVelocityForAutoSlide].
   /// - A slide is forced from the [controller] (effectively triggering an auto-slide to [maxSlideDistance]).
-  final VoidCallback onSlideCompleted;
+  final VoidCallback? onSlideCompleted;
 
   /// Called when:
   /// - The slide gesture ends with a value inferior or equal to [minSlideDistanceToValidate] and [minSlideDistanceToValidate] is not equal to [double.infinity].
   /// - The slide gesture ends with a velocity inferior or equal to [minDragVelocityForAutoSlide] and [minDragVelocityForAutoSlide] is not equal to [double.infinity].
   /// - A slide is forced from the [controller] (effectively triggering an auto-slide to the starting position).
-  final VoidCallback onSlideCanceled;
+  final VoidCallback? onSlideCanceled;
 
   /// Called each frame when the slide gesture is active (i.e. after [onSlideStarted] and before [onSlideCompleted] or [onSlideCanceled]) and during the auto-slide.
   ///
   /// returns the normalized position of the slide container as a value between 0.0 and 1.0 where 0.0 means the container is at the starting position and 1.0 means the container is at [maxSlideDistance].
-  final ValueChanged<double> onSlide;
+  final ValueChanged<double>? onSlide;
 
   /// Register this controller to be able to manually force a slide in a given direction.
-  final SlideContainerController controller;
+  final SlideContainerController? controller;
 
   SlideContainer({
-    @required this.child,
+    required this.child,
     this.slideDirection = SlideContainerDirection.vertical,
     this.minDragVelocityForAutoSlide = 600.0,
     this.autoSlideDuration = const Duration(milliseconds: 300),
@@ -127,10 +127,7 @@ class SlideContainer extends StatefulWidget {
     this.onSlideCanceled,
     this.onSlide,
     this.controller,
-  })  : assert(child != null),
-        assert(autoSlideDuration != null),
-        assert(dampeningStrength != null && dampeningStrength >= 1.0),
-        assert(slideDirection != null);
+  })  : assert(dampeningStrength >= 1.0);
 
   @override
   _State createState() => _State();
@@ -145,10 +142,10 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
   bool isFirstDragFrame = true;
   bool didValidate = false;
   bool didForceSlide = false;
-  AnimationController animationController;
-  Ticker followFingerTicker;
+  AnimationController? animationController;
+  Ticker? followFingerTicker;
 
-  SlideContainerController get controller => widget.controller;
+  SlideContainerController? get controller => widget.controller;
 
   SlideContainerDirection get slideDirection => widget.slideDirection;
 
@@ -167,7 +164,7 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
       widget.minSlideDistanceToValidate ?? maxDragDistance * 0.5;
 
   double get containerOffset =>
-      animationController.value * maxDragDistance * dragTarget.sign;
+      animationController!.value * maxDragDistance * dragTarget.sign;
 
   SlideContainerLock get lock {
     switch (slideDirection) {
@@ -179,7 +176,6 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-        break;
       case SlideContainerDirection.bottomToTop:
         if (containerOffset == -maxDragDistance) {
           return SlideContainerLock.top;
@@ -188,7 +184,6 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-        break;
       case SlideContainerDirection.vertical:
         if (containerOffset == -maxDragDistance) {
           return SlideContainerLock.vertical;
@@ -197,7 +192,6 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-        break;
       case SlideContainerDirection.leftToRight:
         if (containerOffset == maxDragDistance) {
           return SlideContainerLock.right;
@@ -206,7 +200,6 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-        break;
       case SlideContainerDirection.rightToLeft:
         if (containerOffset == -maxDragDistance) {
           return SlideContainerLock.left;
@@ -215,7 +208,6 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-        break;
       case SlideContainerDirection.horizontal:
         if (containerOffset == -maxDragDistance) {
           return SlideContainerLock.left;
@@ -224,7 +216,6 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-        break;
       default:
         return SlideContainerLock.none;
     }
@@ -238,7 +229,7 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: widget.autoSlideDuration)
           ..addListener(() {
             if (widget.onSlide != null)
-              widget.onSlide(animationController.value);
+              widget.onSlide!(animationController!.value);
             if (mounted) setState(() {});
           });
 
@@ -254,17 +245,17 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         if (dragTarget.abs() > minDragDistanceToValidate) {
           if (!didValidate) {
             didValidate = true;
-            if (widget.onSlideValidated != null) widget.onSlideValidated();
+            if (widget.onSlideValidated != null) widget.onSlideValidated!();
           }
         } else {
           if (didValidate) {
             didValidate = false;
-            if (widget.onSlideUnvalidated != null) widget.onSlideUnvalidated();
+            if (widget.onSlideUnvalidated != null) widget.onSlideUnvalidated!();
           }
         }
       }
 
-      animationController.value = dragTarget.abs() / maxDragDistance;
+      animationController!.value = dragTarget.abs() / maxDragDistance;
     });
 
     registerGestureRecognizer();
@@ -288,8 +279,8 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
   }
 
   void onControllerUpdated() {
-    final SlideContainerDirection forcedSlideDirection =
-        controller.forcedSlideDirection;
+    final SlideContainerDirection? forcedSlideDirection =
+        controller!.forcedSlideDirection;
 
     assert(
         ((forcedSlideDirection == SlideContainerDirection.topToBottom ||
@@ -308,8 +299,8 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         "Invalid force slide direction = $forcedSlideDirection for container of directionality = $slideDirection.");
 
     didForceSlide = true;
-    if (followFingerTicker.isActive) {
-      followFingerTicker.stop();
+    if (followFingerTicker!.isActive) {
+      followFingerTicker!.stop();
     }
 
     if (containerOffset == 0.0) {
@@ -373,23 +364,23 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
   double getDelta(DragUpdateDetails details) =>
       isVerticalSlide ? details.delta.dy : details.delta.dx;
 
-  void completeSlide() => animationController.forward().then((_) {
-        if (widget.onSlideCompleted != null) widget.onSlideCompleted();
+  void completeSlide() => animationController!.forward().then((_) {
+        if (widget.onSlideCompleted != null) widget.onSlideCompleted!();
       });
 
-  void cancelSlide() => animationController.reverse().then((_) {
-        if (widget.onSlideCanceled != null) widget.onSlideCanceled();
+  void cancelSlide() => animationController!.reverse().then((_) {
+        if (widget.onSlideCanceled != null) widget.onSlideCanceled!();
       });
 
   void handlePanStart(DragStartDetails details) {
     didForceSlide = false;
-    animationController.stop();
+    animationController!.stop();
     isFirstDragFrame = true;
-    dragValue = animationController.value * maxDragDistance * dragTarget.sign;
+    dragValue = animationController!.value * maxDragDistance * dragTarget.sign;
     dragTarget = dragValue;
     didValidate = dragTarget != 0;
-    followFingerTicker.start();
-    if (widget.onSlideStarted != null) widget.onSlideStarted();
+    followFingerTicker!.start();
+    if (widget.onSlideStarted != null) widget.onSlideStarted!();
   }
 
   void handlePanUpdate(DragUpdateDetails details) {
@@ -428,7 +419,7 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
           ? completeSlide()
           : cancelSlide();
     }
-    followFingerTicker.stop();
+    followFingerTicker!.stop();
   }
 
   @override

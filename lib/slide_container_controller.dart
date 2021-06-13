@@ -7,9 +7,9 @@ import 'package:slide_container/slide_container.dart';
 ///
 /// Will only work after the controller has been attached to a SlideController from a build function.
 class SlideContainerController extends ChangeNotifier {
-  SlideContainerDirection _forcedSlideDirection;
+  SlideContainerDirection? _forcedSlideDirection;
 
-  SlideContainerDirection get forcedSlideDirection => _forcedSlideDirection;
+  SlideContainerDirection? get forcedSlideDirection => _forcedSlideDirection;
 
   void forceSlide(SlideContainerDirection slideDirection) {
     _forcedSlideDirection = slideDirection;

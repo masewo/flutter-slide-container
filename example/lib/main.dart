@@ -49,15 +49,15 @@ class _State extends State<_Body> {
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Container(),
-                title: Text('1'),
+                label: '1',
               ),
               BottomNavigationBarItem(
                 icon: Container(),
-                title: Text('2'),
+                label: '2',
               ),
               BottomNavigationBarItem(
                 icon: Container(),
-                title: Text('3'),
+                label: '3',
               ),
             ],
             currentIndex: selectedPageIndex,
