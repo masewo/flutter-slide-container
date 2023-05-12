@@ -47,3 +47,7 @@ ios/Runner.ipa
 
 # Flutter auto generated:
 example/ios/Flutter/flutter_export_environment.sh
+
+.idea
+.fvm/flutter_sdk
+.dart_tool

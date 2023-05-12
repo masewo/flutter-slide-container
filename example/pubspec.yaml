@@ -3,10 +3,9 @@ description: Demo of the Slide Container.
 publish_to: 'none'
 
 version: 1.0.5
-author: Quentin Le Guennec <quentin@tengio.com>
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:

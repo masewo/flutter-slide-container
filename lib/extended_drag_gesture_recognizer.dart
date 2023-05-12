@@ -116,11 +116,11 @@ abstract class ExtendedDragGestureRecognizer extends DragGestureRecognizer {
   ///
   /// {@macro flutter.gestures.GestureRecognizer.kind}
   ExtendedDragGestureRecognizer({
-    Object? debugOwner,
-    PointerDeviceKind? kind,
+    super.debugOwner,
+    super.supportedDevices,
     this.dragStartBehavior = DragStartBehavior.start,
     this.velocityTrackerBuilder = _defaultBuilder,
-  }) : super(debugOwner: debugOwner, kind: kind);
+  });
 
   static VelocityTracker _defaultBuilder(PointerEvent event) => VelocityTracker.withKind(event.kind);
   /// Configure the behavior of offsets sent to [onStart].
