@@ -50,6 +50,9 @@ class LockableVerticalDragGestureRecognizer
   double _getPrimaryValueFromOffset(Offset value) => value.dy;
 
   @override
+  Offset _zeroNonPrimaryValueFromOffset(Offset value) => Offset(0, value.dy);
+
+  @override
   String get debugDescription => 'lockable vertical drag';
 }
 
@@ -97,6 +100,9 @@ class LockableHorizontalDragGestureRecognizer
 
   @override
   double _getPrimaryValueFromOffset(Offset? value) => value!.dx;
+
+  @override
+  Offset _zeroNonPrimaryValueFromOffset(Offset value) => Offset(value.dx, 0);
 
   @override
   String get debugDescription => 'lockable horizontal drag';
@@ -274,6 +280,7 @@ abstract class ExtendedDragGestureRecognizer extends DragGestureRecognizer {
 
   Offset _getDeltaForDetails(Offset delta);
   double? _getPrimaryValueFromOffset(Offset value);
+  Offset _zeroNonPrimaryValueFromOffset(Offset value);
   bool _hasSufficientGlobalDistanceToAccept(PointerDeviceKind pointerDeviceKind);
 
   final Map<int, VelocityTracker> _velocityTrackers = <int, VelocityTracker>{};
@@ -498,7 +505,7 @@ abstract class ExtendedDragGestureRecognizer extends DragGestureRecognizer {
 
     final VelocityEstimate? estimate = tracker.getVelocityEstimate();
     if (estimate != null && isFlingGesture(estimate, tracker.kind)) {
-      final Velocity velocity = Velocity(pixelsPerSecond: estimate.pixelsPerSecond)
+      final Velocity velocity = Velocity(pixelsPerSecond: _zeroNonPrimaryValueFromOffset(estimate.pixelsPerSecond))
           .clampMagnitude(minFlingVelocity ?? kMinFlingVelocity, maxFlingVelocity ?? kMaxFlingVelocity);
       details = DragEndDetails(
         velocity: velocity,
