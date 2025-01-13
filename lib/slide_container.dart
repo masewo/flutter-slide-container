@@ -215,9 +215,7 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
         } else {
           return SlideContainerLock.none;
         }
-      default:
-        return SlideContainerLock.none;
-    }
+      }
   }
 
   @override
@@ -332,7 +330,7 @@ class _State extends State<SlideContainer> with TickerProviderStateMixin {
   }
 
   GestureRecognizerFactoryWithHandlers<T>
-      createGestureRecognizer<T extends DragGestureRecognizer>(
+      createGestureRecognizer<T extends ExtendedDragGestureRecognizer>(
               GestureRecognizerFactoryConstructor<T> constructor) =>
           GestureRecognizerFactoryWithHandlers<T>(
             constructor,

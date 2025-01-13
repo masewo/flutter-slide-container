@@ -7,7 +7,7 @@ import 'package:slide_container/slide_container_controller.dart';
 
 class HelpPage extends PopupRoute<Null> {
   @override
-  Color get barrierColor => null;
+  Color? get barrierColor => null;
 
   @override
   bool get barrierDismissible => false;
@@ -100,14 +100,14 @@ class _PageLayoutState extends State<_PageLayout> {
 /// Handy version of the [SlideContainer] to pop pages with a slide.
 class _ClosePageSlideContainer extends StatefulWidget {
   final Widget child;
-  final VoidCallback onSlideStarted;
-  final VoidCallback onSlideCompleted;
-  final VoidCallback onSlideCanceled;
-  final ValueChanged<double> onSlide;
-  final SlideContainerController controller;
+  final VoidCallback? onSlideStarted;
+  final VoidCallback? onSlideCompleted;
+  final VoidCallback? onSlideCanceled;
+  final ValueChanged<double>? onSlide;
+  final SlideContainerController? controller;
 
   _ClosePageSlideContainer({
-    @required this.child,
+    required this.child,
     this.onSlideStarted,
     this.onSlideCompleted,
     this.onSlideCanceled,
@@ -135,11 +135,11 @@ class _ClosePageSlideContainerState extends State<_ClosePageSlideContainer> {
               3.784127 * pow(verticalPosition, 3))
           .clamp(0.0, 1.0));
     }
-    if (widget.onSlide != null) widget.onSlide(verticalPosition);
+    if (widget.onSlide != null) widget.onSlide!(verticalPosition);
   }
 
   void onSlideCompleted() {
-    if (widget.onSlideCompleted != null) widget.onSlideCompleted();
+    if (widget.onSlideCompleted != null) widget.onSlideCompleted!();
     Navigator.of(context).pop();
   }
 

@@ -93,9 +93,9 @@ class _State extends State<Page1> {
                       end: Alignment.bottomRight,
                       colors: [
                         Color.lerp(
-                            Color(0xfffddb92), Color(0xfffed6e3), position),
+                            Color(0xfffddb92), Color(0xfffed6e3), position)!,
                         Color.lerp(
-                            Color(0xffd1fdff), Color(0xff9a9ce2), position),
+                            Color(0xffd1fdff), Color(0xff9a9ce2), position)!,
                       ],
                     ),
                     boxShadow: [
